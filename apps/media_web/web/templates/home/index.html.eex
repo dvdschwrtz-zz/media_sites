@@ -1,0 +1,71 @@
+<div class="home">
+  <%= for review <- check_list(@reviews) do %>
+    <div class="home__article-summary-wrap">
+      <div class="home__article-summary">
+        <div class="home__image">
+            <%= Amp.img(
+              @page_type,
+              review.main_photo["hd-url"],
+              '#{review.main_photo["url"]}',
+              '#{review.main_photo["mb-url"]}',
+              review.main_photo["mb-height"],
+              review.main_photo["mb-width"],
+              review.main_photo["alt"]) %>
+        </div>
+        <div class="home--summary-title"><%= link review.title, to: review_path(@conn, :show, review.title), class: "right" %></div>
+      </div>
+    </div>
+  <% end %>
+  
+  <div class="home__articles">
+    <%= for {article, idx} <- Enum.with_index(check_list(@articles)) do %>
+        <%= if idx == 0 do %>
+          <div class="home__article-featured-wrap">
+            <div class="home__article-featured row">
+              <div class="home__image col-m-8">
+                  <a href="<%= article_path(@conn, :show, article.title) %>">
+                    <%= Amp.img(
+                      @page_type,
+                      article.main_photo["hd-url"],
+                      '#{article.main_photo["url"]}',
+                      '#{article.main_photo["mb-url"]}',
+                      article.main_photo["mb-height"],
+                      article.main_photo["mb-width"],
+                      article.main_photo["alt"]) %>
+                    </a>
+                </div>
+              <div class="home--featured-content col-m-4">
+                <div class="home--featured-title"><%= link article.title, to: article_path(@conn, :show, article.title), class: "right" %></div>
+                <div class="home--featured-teaser">
+                  <p><%= String.slice(article.summary, 0, 150) %>...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+        <div class="home__articles-remainder row">
+          <% else %>
+            <div class="home__article-summary-wrap col-m-6 col-4">
+              <div class="home__article-summary">
+                <div class="home__image">
+                  <a href="<%= article_path(@conn, :show, article.title) %>">
+                    <%= Amp.img(
+                      @page_type,
+                      article.main_photo["hd-url"],
+                      '#{article.main_photo["url"]}',
+                      '#{article.main_photo["mb-url"]}',
+                      article.main_photo["mb-height"],
+                      article.main_photo["mb-width"],
+                      article.main_photo["alt"]) %>
+                    </a>
+                </div>
+                <div class="home--summary-content">
+                  <div class="home--summary-title"><%= link article.title, to: article_path(@conn, :show, article.title), class: "right" %></div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+    <% end %>
+    </div>
+  </div>
+</div>

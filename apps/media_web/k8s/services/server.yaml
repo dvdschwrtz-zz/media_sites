@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: media-server
+  namespace: media-sites-prod
+spec:
+  type: NodePort
+  selector:
+    app: media-sites
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 4000

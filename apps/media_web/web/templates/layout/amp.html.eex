@@ -1,0 +1,80 @@
+<!doctype html>
+<html amp>
+<head>
+  <meta charset="utf-8">
+  <title><%= "#{@site_env} Home" %></title>
+  <link rel="canonical" href='<%= canonical(@conn, @page_type, @site_env) %>'>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <link href='https://fonts.googleapis.com/css?family=Questrial' rel='stylesheet' type='text/css'>
+  <style amp-custom>
+    <%= File.read!("priv/static/css/app-amp.css") %>
+  </style>
+  <script async custom-element="amp-sidebar" src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"></script>
+  <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+  <script async src="https://cdn.ampproject.org/v0.js"></script>
+  <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
+</head>
+  <body>
+    <header>
+      <nav class="nav">
+        <a class="nav__logo" href="/">
+          <amp-img height="40" width="200" src='<%= static_path(@conn, "/images/#{@site_env}_logo.png") %>'></amp-img>
+        </a>
+
+        <div class="nav__hamburger" tabindex="0" role="button" on="tap:sidebar.open">
+          <%= Amp.img(@page_type,
+          "/images/hamburger.png",
+          "/images/hamburger.png",
+          "/images/hamburger.png",
+          50,
+          50,
+          "hamburger menu") %>
+        </div>
+      </nav>
+    </header>
+
+
+    <amp-sidebar id="sidebar" class="amp-sidebar"
+      layout="nodisplay"
+      side="right">
+      <amp-img class="amp-sidebar__close"
+        src="/images/close.png"
+        width="30"
+        height="30"
+        alt="close sidebar"
+        on="tap:sidebar.close"
+        role="button"
+        tabindex="0"></amp-img>
+      <ul class="amp-sidebar__list">
+        <li>
+          <a href="/">Home</a>
+        </li>
+        <%= for category <- show_categories(@site_env) do %>
+          <li><%= link category.name, to: category_path(@conn, :show, category.name) %></li>
+        <% end %>
+      </ul>
+    </amp-sidebar>
+
+    <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+    <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+
+    <main role="main">
+      <%= render @view_module, @view_template, assigns %>
+    </main>
+    <amp-analytics type="googleanalytics">
+      <script type="application/json">
+      {
+        "vars": {
+          "account": "<%= @ga_account %>"
+        },
+        "triggers": {
+          "trackPageview": {
+            "on": "visible",
+            "request": "pageview"
+          }
+        }
+      }
+      </script>
+    </amp-analytics>
+  </body>
+</html>

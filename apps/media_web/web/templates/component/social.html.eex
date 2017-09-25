@@ -1,0 +1,14 @@
+<ul class="social-bar">
+  <li>
+    <a href="https://twitter.com/googledesign" role="button" title="Twitter"><img width="30px" src="/images/twitter.png"></a>
+  </li>
+  <li>
+    <a href="https://plus.google.com/+googledesign" role="button" title="Google+"><img width="30px" src="/images/gplus.png"></a>
+  </li>
+  <li>
+    <a href="https://twitter.com/googledesign" role="button" title="Twitter"><img width="30px" src="/images/twitter.png"></a>
+  </li>
+  <li>
+    <a href="https://plus.google.com/+googledesign" role="button" title="Google+"><img width="30px" src="/images/gplus.png"></a>
+  </li>
+</ul>

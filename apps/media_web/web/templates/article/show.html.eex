@@ -1,0 +1,61 @@
+<div class="content-header">
+  <div class="content-header__wrapper row">
+    <div class="content-header__image col-8">
+      <%= Amp.img(
+        @page_type,
+        @article.main_photo["hd-url"],
+        '#{@article.main_photo["url"]}',
+        '#{@article.main_photo["mb-url"]}',
+        @article.main_photo["mb-height"],
+        @article.main_photo["mb-width"],
+        @article.main_photo["alt"]) %>
+    </div>
+    <div class="content-header__title-box col-4">
+      <h1><%= @article.title %></h1>
+      <hr class="content-header__hr-line">
+      <span class="content-header--writer-name">by <%= @article.author %>, </span>
+      <br>
+      <span class="content-header--article-date">on <%= format_datetime(@article.last_published) %></span>
+    </div>
+  </div>
+</div>
+
+<article class="article row">
+  <div class="article__wrapper col-8">
+    <p><%= @article.summary %></p>
+    <%= for section <- @article.sections do %>
+      <%= for {key, value} <- Enum.reverse(section) do %>
+        <%= if key == "title" do %>
+            <h4><%= value %></h4>
+        <%= end %>
+        <%= if key == "content" do %>
+          <p><%= value %></p>
+        <%= end %>
+      <%= end %>
+    <%= end %>
+  </div>
+  <div class="sidebar col-4">
+    <h3>Featured Articles</h3>
+    <div class="sidebar__popular-content">
+    <%= for featured <- check_list(@articles) do %>
+      <%= if featured.title != @article.title do %>
+        <div class="sidebar--wiggle-me">
+            <a href="<%= article_path(@conn, :show, featured.title) %>">
+              <%= Amp.img(
+                @page_type,
+                featured.main_photo["hd-url"],
+                '#{featured.main_photo["url"]}',
+                '#{featured.main_photo["mb-url"]}',
+                150,
+                150,
+                featured.main_photo["alt"]) %>
+              <div class="sidebar__title"><%= featured.title %></div>
+            </a>
+        </div>
+      <% end %>
+    <% end %>
+    </div>
+  </div>
+</article>
+
+<%= render MediaWeb.ComponentView, "article-structured-data.html", conn: @conn, article: @article, site_env: @site_env %>

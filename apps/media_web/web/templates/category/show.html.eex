@@ -1,0 +1,45 @@
+<div class="category-header">
+  <h1><%= @category %></h1>
+</div>
+
+<div class="category row">
+  <%= for review <- check_list(@reviews) do %>
+    <div class="category__article-summary-wrap">
+      <div class="category__article-summary">
+        <div class="category__image">
+          <%= Amp.img(
+            @page_type,
+            review.main_photo["hd-url"],
+            '#{review.main_photo["url"]}',
+            '#{review.main_photo["mb-url"]}',
+            review.main_photo["mb-height"],
+            review.main_photo["mb-width"],
+            review.main_photo["alt"]) %>
+        </div>
+        <div class="category--summary-title"><%= link review.title, to: review_path(@conn, :show, review.title), class: "right" %></div>
+      </div>
+    </div>
+  <% end %>
+  <%= for article <- check_list(@articles) do %>
+    <div class="category__article-summary-wrap col-m-6">
+      <div class="category__article-summary">
+        <div class="category__image">
+          <a href="<%= article_path(@conn, :show, article.title) %>">
+            <%= Amp.img(
+              @page_type,
+              article.main_photo["hd-url"],
+              '#{article.main_photo["url"]}',
+              '#{article.main_photo["mb-url"]}',
+              article.main_photo["mb-height"],
+              article.main_photo["mb-width"],
+              article.main_photo["alt"]) %>
+            </a>
+        </div>
+        <div class="category--summary-content">
+          <div class="category--featured-title"><%= link article.title, to: article_path(@conn, :show, article.title), class: "right" %></div>
+          <div class="category--featured-teaser"><%= String.slice(article.summary, 0, 150) %>...</div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

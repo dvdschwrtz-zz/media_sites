@@ -1,0 +1,139 @@
+<%= render MediaWeb.ComponentView, "social.html" %>
+
+<div class="content-header">
+  <div class="content-header__wrapper">
+    <div class="content-header__image">
+      <%= Amp.img(
+        @page_type,
+        @review.main_photo["url"],
+        '#{@review.main_photo["url"]}',
+        '#{@review.main_photo["mb-url"]}',
+        @review.main_photo["mb-height"],
+        @review.main_photo["mb-width"],
+        @review.main_photo["alt"]) %>
+    </div>
+    <div class="content-header__title-box">
+      <h1><%= @review.title %></h1>
+      <hr class="content-header__hr-line">
+      <span class="content-header--writer-info">by L. Ron Hubbard, on February 18, 2017</span>
+    </div>
+  </div>
+</div>
+
+<article class="review">
+  <div class="review__wrapper">
+    <h2><%= @review.title %></h2>
+    <p><%= @review.summary %></p>
+    <table class="review__table">
+      <thead>
+        <tr>
+          <%= for field <- Map.keys(Map.get(Enum.at(@review.product, 0), :addl_info)) do %>
+          <th><%= field %></th>
+          <%= end %>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for _product <- Enum.sort_by(@review.product, &(&1.id)) do %>
+        <tr>
+          <%= for value <- Map.values(Map.get(Enum.at(@review.product, 0), :addl_info)) do %>
+            <td><%= value %></td>
+          <%= end %>
+        </tr>
+        <%= end %>
+      </tbody>
+    </table>
+    <%= for product <- Enum.sort_by(@review.product, &(&1.id)) do %>
+      <h2><%= product.title %></h2>
+      <div class="review__product-summary-wrap">
+        <span class="review__product-summary"><%= product.summary %></span>
+        <div class="review__product-image">
+          <%= Amp.img(
+            @page_type,
+            product.product_photo["url"],
+            '#{product.product_photo["url"]}',
+            '#{product.product_photo["mb-url"]}',
+            product.product_photo["mb-height"],
+            product.product_photo["mb-width"],
+            product.product_photo["alt"]) %>
+        </div>
+      </div>
+      <h4>Highlights</h4>
+      <%= for highlight <- product.highlights do %>
+        <div class="review__highlights"><%= highlight %></div>
+      <%= end %>
+      <div class="review__pros-cons-wrap">
+        <div class="review__pros-wrap">
+          <h4>Pros</h4>
+          <ul class="review__pros">
+            <%= for pro <- product.pros do %>
+              <li><%= pro %></li>
+            <%= end %>
+          </ul>
+        </div>
+        <div class="review__cons-wrap">
+          <h4>Cons</h4>
+          <ul class="review__cons">
+            <%= for con <- product.cons do %>
+              <li><%= con %></li>
+            <%= end %>
+          </ul>
+        </div>
+      </div>
+      <h4>Conclusion</h4>
+      <p><%= product.conclusion %></p>
+      <hr>
+    <%= end %>
+    <h2>Final Thoughts</h2>
+    <h4>Brand Analysis</h4>
+    <p><%= @review.conclusion[:brand] %></p>
+    <h4>Overall Conclusion</h4>
+    <p><%= @review.conclusion[:overall] %></p>
+  </div>
+
+  <div class="sidebar">
+    <h2>Popular Articles</h2>
+    <ul class="sidebar__popular-content">
+      <li class="sidebar--wiggle-me">
+        <a href="#">
+          <%= Amp.img(
+            @page_type,
+            @review.main_photo["mb-url"],
+            '#{@review.main_photo["mb-url"]}',
+            '#{@review.main_photo["mb-url"]}',
+            150,
+            150,
+            @review.main_photo["alt"]) %>
+          <span>An example of an article</span>
+        </a>
+      </li>
+      <li class="sidebar--wiggle-me">
+        <a href="#">
+          <%= Amp.img(
+            @page_type,
+            @review.main_photo["mb-url"],
+            '#{@review.main_photo["mb-url"]}',
+            '#{@review.main_photo["mb-url"]}',
+            150,
+            150,
+            @review.main_photo["alt"]) %>
+          <span>An example of an article2</span>
+        </a>
+      </li>
+      <li class="sidebar--wiggle-me">
+        <a href="#">
+          <%= Amp.img(
+            @page_type,
+            @review.main_photo["mb-url"],
+            '#{@review.main_photo["mb-url"]}',
+            '#{@review.main_photo["mb-url"]}',
+            150,
+            150,
+            @review.main_photo["alt"]) %>
+          <span>An example of an article3</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</article>
+
+<%= render MediaWeb.ComponentView, "review-structured-data.html", conn: @conn, review: @review, site_env: @site_env  %>

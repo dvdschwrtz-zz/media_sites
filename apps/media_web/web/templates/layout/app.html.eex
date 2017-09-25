@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title><%= "#{@site_env} Home" %></title>
+
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,600,700" type="text/css">
+  <link rel="amphtml" href='<%= canonical(@conn, @page_type, @site_env) %>'>
+  <link rel='stylesheet' href='<%= static_path(@conn, "/css/#{@site_env}-inline.css") %>'>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', '<%= @ga_account %>', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+</head>
+<body data-site="<%= static_path(@conn, "/css/#{@site_env}.css") %>">
+    <header>
+      <nav class="nav">
+        <a class="nav__logo" href="/">
+          <img src='<%= static_path(@conn, "/images/#{@site_env}_logo.png") %>'>
+        </a>
+        <div class="nav__menu">
+          <ul class="nav__category-links">
+            <li><a href="javascript:void(0)" class="nav__sideNav-close-btn" onclick="toggleNav()">&times;</a></li>
+            <%= for category <- show_categories(@site_env) do %>
+              <li><%= link category.name, to: category_path(@conn, :show, category.name), class: "nav--link" %></li>
+            <% end %>
+          </ul>
+          <a href="javascript:void(0)" class="nav__hamburger-container" onclick="toggleNav()">
+            <div class="nav__hamburger"></div>
+            <div class="nav__hamburger"></div>
+            <div class="nav__hamburger"></div>
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+    <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+
+    <main role="main">
+      <%= render @view_module, @view_template, assigns %>
+    </main>
+
+    <footer class="footer">
+      <ul class="footer__links row">
+        <li><a href="#" class="footer__links--company-name">Corsada, Inc.</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Use</a></li>
+        <li><a href="#">Copyright Policy</a></li>
+      </ul>
+    </footer>
+    <script src="<%= static_path(@conn, "/js/#{@site_env}.min.js") %>"></script>
+  </body>
+</html>

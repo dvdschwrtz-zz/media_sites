@@ -1,0 +1,75 @@
+# [START media_sites_deployment]
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: media-sites
+  namespace: media-sites-prod
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: media-sites
+        env: production
+    spec:
+      containers:
+      - name: media-server
+        image: gcr.io/corsada-157602/media-sites:1.0.6
+        resources:
+          limits:
+            memory: "500Mi"
+            cpu: "100m"
+        imagePullPolicy: Always
+        command: ["/bin/sh", "-c"]
+        args: ["mix ecto.migrate -r Media.Repo && mix phoenix.server"]
+        ports:
+        - name: media-server
+          containerPort: 4000
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 4000
+        env:
+          - name: PORT
+            value: "4000"
+          - name: MIX_ENV
+            value: prod
+          - name: MEDIA_ENV
+            value: "10devices,10kid"
+          - name: DB_HOST
+            value: 127.0.0.1
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: cloudsql-db-credentials
+                key: password
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: cloudsql-db-credentials
+                key: username
+      # [START proxy_container]
+      - name: cloudsql-proxy
+        image: gcr.io/cloudsql-docker/gce-proxy:1.09
+        command: ["/cloud_sql_proxy", "--dir=/cloudsql", "-instances=corsada-157602:us-central1:corsada=tcp:5432", "-credential_file=/secrets/cloudsql/credentials.json"]
+        volumeMounts:
+        - name: cloudsql-instance-credentials
+          mountPath: /secrets/cloudsql
+          readOnly: true
+        - name: ssl-certs
+          mountPath: /etc/ssl/certs
+        - name: cloudsql
+          mountPath: /cloudsql
+      # [END proxy_container]
+      # [START volumes]
+      volumes:
+        - name: cloudsql-instance-credentials
+          secret:
+            secretName: cloudsql-instance-credentials
+        - name: ssl-certs
+          hostPath:
+            path: /etc/ssl/certs
+        - name: cloudsql
+          emptyDir:
+      # [END volumes]
+

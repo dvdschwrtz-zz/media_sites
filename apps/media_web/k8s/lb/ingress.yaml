@@ -1,0 +1,9 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: media-sites
+  namespace: media-sites-prod
+spec:
+  backend:
+    serviceName: media-server
+    servicePort: 80

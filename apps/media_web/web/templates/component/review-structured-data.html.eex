@@ -1,0 +1,34 @@
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "<%= MediaWeb.Router.Helpers.url(@conn) <> @conn.request_path %>"
+    },
+    "headline": "Article headline",
+    "image": {
+      "@type": "ImageObject",
+      "url": "<%= @review.main_photo["mb-url"] %>",
+      "height": "<%= @review.main_photo["mb-height"] %>",
+      "width": "<%= @review.main_photo["mb-width"] %>"
+    },
+    "datePublished": "<%= @review.first_published %>",
+    "dateModified": "<%= @review.last_published %>",
+    "author": {
+      "@type": "Person",
+      "name": "<%= @review.author %>"
+    },
+     "publisher": {
+      "@type": "Organization",
+      "name": "<%= @site_env %>",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "<%= MediaWeb.Router.Helpers.url(@conn) <> "/images/#{@site_env}_logo.png" %>",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "<%= @review.title %>"
+  }
+</script>

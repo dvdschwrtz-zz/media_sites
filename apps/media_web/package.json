@@ -1,0 +1,29 @@
+{
+  "name": "media_web",
+  "version": "0.0.1",
+  "description": "media web",
+  "repository": "https://github.com/user/project.git",
+  "main": "app.js",
+  "scripts": {
+    "build": "rimraf priv/static && MEDIA_ENV=\"10devices,10kid\" webpack -p --env.prod",
+    "build:dev": "./node_modules/.bin/webpack --env.dev",
+    "watch": "./node_modules/.bin/webpack --watch-stdin --color --env.dev"
+  },
+  "author": "dvdschwrtz",
+  "license": "ISC",
+  "devDependencies": {
+    "copy-webpack-plugin": "^4.0.1",
+    "css-loader": "^0.26.1",
+    "extract-text-webpack-plugin": "^2.0.0-beta.5",
+    "file-loader": "^0.10.0",
+    "google-closure-compiler-js": "^20161201.0.1",
+    "node-sass": "^4.3.0",
+    "rimraf": "^2.6.1",
+    "sass-loader": "^4.1.1",
+    "url-loader": "^0.5.7",
+    "webpack": "^2.2.0"
+  },
+  "dependencies": {
+    "postcss-env-replace": "0.0.2"
+  }
+}
